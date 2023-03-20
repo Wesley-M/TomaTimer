@@ -2,20 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { ChakraProvider } from '@chakra-ui/react';
 import {TasksProvider} from "./contexts/TasksContext";
 import {TimeProvider} from "./contexts/TimeContext";
+import {ThemeContextProvider} from "./themes/ThemeContext";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 
 root.render(
-    <ChakraProvider>
+    <ThemeContextProvider>
         <TasksProvider>
             <TimeProvider>
                 <App/>
             </TimeProvider>
         </TasksProvider>
-    </ChakraProvider>
+    </ThemeContextProvider>
 );

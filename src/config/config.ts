@@ -1,5 +1,5 @@
 // Normal task time (in seconds)
-export const NORMAL = 25 * 60;
+export const NORMAL = 5;
 
 // Break task time (in seconds)
-export const BREAK = 5 * 60;
+export const BREAK = 2;

@@ -3,7 +3,7 @@ import { Box, Text } from "@chakra-ui/react";
 export default function Footer() {
   return (
     <Box
-      bg="#EB3F3F"
+      bg="secondary.main"
       color="#EDEDED"
       py={4}
       textAlign="left"
@@ -13,7 +13,7 @@ export default function Footer() {
       <Text>
         Created with{" "}
         <Text fontWeight="bold" display="inline">
-          joy
+          ChakraUI & React
         </Text>{" "}
         by Wesley-M
       </Text>

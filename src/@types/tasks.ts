@@ -1,12 +1,15 @@
 import {DropResult} from "react-beautiful-dnd";
 import {Config} from "use-timer/lib/types";
+import {Dispatch, SetStateAction} from "react";
+
+export type TaskCategory = 'NORMAL' | 'BREAK';
 
 export type TaskT = {
     id: number;
     content: string;
     completeTomatoes: number;
     tomatoes: number;
-    type: 'NORMAL' | 'BREAK';
+    type: TaskCategory;
 }
 
 export type TasksContextType = {
@@ -32,9 +35,14 @@ export type Timer = {
 export type TimeContextType = {
     timer: Timer;
     progress: number;
-    timerId: 'NORMAL' | 'BREAK';
+    timerId: TaskCategory;
     userStart: () => void;
     userReset: () => void;
+};
+
+export type ThemeContextType = {
+    theme: TaskCategory;
+    setTheme:  Dispatch<SetStateAction<TaskCategory>>
 };
 
 export type TimerConfig = Config;

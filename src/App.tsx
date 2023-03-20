@@ -5,11 +5,10 @@ import {Box, Flex} from "@chakra-ui/react";
 import PomodoroTimer from "./components/PomodoroTimer";
 import TaskOrganizer from "./components/TaskOrganizer";
 import Footer from "./components/Footer";
-import TimeContext from "./contexts/TimeContext";
 
 function App() {
     return (
-        <Flex flexDirection="column" minHeight="100vh" className="App">
+        <Flex bg="primary.main" transition="all 500ms ease" flexDirection="column" minHeight="100vh" className="App">
             <Navbar/>
             <Flex
                 flexGrow={1}
@@ -17,10 +16,10 @@ function App() {
                 color='white'
                 mb='15vh'
             >
-                <Box flex={['1', '2', '2', '1']}>
+                <Box w="fit-content">
                     <PomodoroTimer/>
                 </Box>
-                <Box flex={['1', '2', '3', '2']}>
+                <Box w="fit-content">
                     <TaskOrganizer/>
                 </Box>
             </Flex>

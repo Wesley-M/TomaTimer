@@ -3,6 +3,7 @@ import { useTimer } from "use-timer";
 import { TimeContextType, Timer, TimerConfig } from "../@types/tasks";
 import { BREAK, NORMAL } from "../config/config";
 import TasksContext from "./TasksContext";
+import {useThemeContext} from "../themes/ThemeContext";
 
 interface Props {
   children: React.ReactNode;
@@ -30,6 +31,11 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
    * The tasks context
    * */
   const tasksContext = useContext(TasksContext);
+
+  /**
+   * Theme utilities
+   * */
+  const theme = useThemeContext();
 
   /**
    * Base timer configurations
@@ -128,16 +134,21 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
     }
   }, [timeOverSignal]);
 
+  /**
+   * Monitors the active task type
+   * */
   useEffect(() => {
     const activeTask = tasksContext?.tasks[0];
     if (activeTask) {
       if (["NORMAL", "BREAK"].includes(activeTask.type)) {
         setCurrTimer(activeTask.type);
         autoStart(activeTask.type === "NORMAL" ? pomodoroTimer : breakTimer);
+        theme.changeTheme(activeTask.type);
       }
     } else {
       setCurrTimer("NORMAL");
       pomodoroTimer.reset();
+      theme.changeTheme("NORMAL");
     }
   }, [tasksContext?.tasks]);
 
