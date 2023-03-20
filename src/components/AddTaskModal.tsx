@@ -75,11 +75,11 @@ export const AddTaskModal: React.FC<TaskModalProps> = ({
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color="#EB3F3F">Create a new task</ModalHeader>
+          <ModalHeader color="primary.main">Create a new task</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel color="#282828CC">Description</FormLabel>
+              <FormLabel color="text.dark">Description</FormLabel>
               <Input
                 onChange={handleDescriptionChange}
                 value={description}
@@ -88,7 +88,7 @@ export const AddTaskModal: React.FC<TaskModalProps> = ({
             </FormControl>
 
             <FormControl mt={4}>
-              <FormLabel color="#282828CC">Pomodoros</FormLabel>
+              <FormLabel color="text.dark">Pomodoros</FormLabel>
               <Input
                 onChange={handlePomodoroChange}
                 value={pomodoros}
@@ -99,7 +99,7 @@ export const AddTaskModal: React.FC<TaskModalProps> = ({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="red" onClick={saveTask} mr={3}>
+            <Button onClick={saveTask} mr={3}>
               Save
             </Button>
             <Button onClick={onClose}>Cancel</Button>
