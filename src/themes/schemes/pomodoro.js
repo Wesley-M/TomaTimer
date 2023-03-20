@@ -3,11 +3,12 @@ import {extendTheme} from "@chakra-ui/react";
 export const pomodoroTheme = extendTheme({
   colors: {
     primary: {
-      main: "#EB3F3F"
+      main: "#AD343E"
     },
     secondary: {
       light: "#00000033",
       main: "#00000066",
+      dark: "#00000099"
     },
     text: {
       light: "#FFFFFF99",

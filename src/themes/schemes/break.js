@@ -8,6 +8,7 @@ export const breakTheme = extendTheme({
     secondary: {
       light: "#00000033",
       main: "#00000066",
+      dark: "#00000099"
     },
     text: {
       light: "#FFFFFF99",

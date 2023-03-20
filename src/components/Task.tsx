@@ -24,7 +24,7 @@ export const Task = ({
         <Draggable draggableId={`id-${data.id}`} index={index}>
             {(provided) => (
                 <Stack
-                    color="secondary.main"
+                    color="secondary.dark"
                     bg="text.main"
                     p="0.5em"
                     w="100%"
