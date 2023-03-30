@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { TasksContextType, TaskT } from "../@types/tasks";
 
@@ -24,6 +24,29 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
    * */
   const [historySwitch, setHistorySwitch] = useState(false);
 
+  /** 
+   * Restore tasks on mount
+   * */
+  useEffect(() => {
+    restoreTasks();
+  }, []);
+
+  /**
+   * Save tasks to local storage and local state
+   * */
+  const saveTasks = (tasks: TaskT[]) => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    setTasks(tasks);
+  };
+
+  /** 
+   * Restore tasks from local storage
+   * */
+  const restoreTasks = () => {
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    setTasks(tasks);
+  };
+
   const addTask = (task: Partial<TaskT>) => {
     const newTask: TaskT = {
       id: tasks.length + 1,
@@ -32,14 +55,14 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
       completeTomatoes: 0,
       type: task?.type ?? "NORMAL",
     };
-    setTasks([...tasks, newTask]);
+    saveTasks([...tasks, newTask]);
   };
 
   /**
    * Removes a task by id
    * */
   const removeTask = (id: number) => {
-    setTasks(tasks.filter((task) => task.id != id));
+    saveTasks(tasks.filter((task) => task.id !== id));
   };
 
   /**
@@ -52,7 +75,7 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
   /**
    * Completes a task by removing the head (active task)
    * */
-  const completeTask = () => {
+  const completeActiveTask = () => {
     setHistory((old) => {
       return [getActiveTask(), ...old];
     });
@@ -62,15 +85,15 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
   /**
    * The active task still has tomatoes to go
    * */
-  const taskHasIncompleteTomatoes = () => {
+  const hasTomatoes = () => {
     const activeTask = tasks[0];
-    return activeTask.tomatoes - (activeTask.completeTomatoes + 1) == 0;
+    return activeTask.tomatoes - (activeTask.completeTomatoes + 1) === 0;
   };
 
   /**
    * Adding a new tomato to the active task
    * */
-  const addTomato = () => {
+  const addCompleteTomato = () => {
     const activeTask = tasks[0];
     return [
       {
@@ -88,14 +111,10 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
     let newTasks: TaskT[] = [];
 
     if (getActiveTask()) {
-      if (taskHasIncompleteTomatoes()) {
-        newTasks = completeTask();
-      } else {
-        newTasks = addTomato();
-      }
+      newTasks = hasTomatoes() ? completeActiveTask() : addCompleteTomato();
     }
 
-    setTasks(newTasks);
+    saveTasks(newTasks);
 
     return newTasks;
   };
@@ -130,7 +149,7 @@ export const TasksProvider: React.FC<Props> = ({ children }) => {
       result.destination.index
     );
 
-    setTasks(reorderedTasks);
+    saveTasks(reorderedTasks);
   };
 
   /**
