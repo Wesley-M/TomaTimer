@@ -28,7 +28,7 @@ const PomodoroTimer: React.FC = () => {
             mt="3em"
             ml="2em"
             mr={["10vw", "10vw", "5vw"]}
-            w={["85vw", "85vw", "35vw", "25em", "30em"]}
+            w={["85vw", "85vw", "85vw", "25em", "30em"]}
             h={["15em", "20em", "20em", "20em", "20em"]}
             borderRadius="0.8em"
             transition="all 500ms ease"
@@ -39,7 +39,7 @@ const PomodoroTimer: React.FC = () => {
                     <Center>
                         <Text
                             fontFamily="Anton, sans-serif"
-                            fontSize={["4em", "5em", "4em", "5.5em"]}
+                            fontSize={["4em", "5em", "5.5em", "6em"]}
                         >
                             {toMMSS(timeContext?.timer.time ?? 0)}
                         </Text>

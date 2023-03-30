@@ -12,7 +12,7 @@ function App() {
             <Navbar/>
             <Flex
                 flexGrow={1}
-                flexDirection={{base: 'column', md: 'row'}}
+                flexDirection={{base: 'column', lg: 'row'}}
                 color='white'
                 mb='15vh'
             >

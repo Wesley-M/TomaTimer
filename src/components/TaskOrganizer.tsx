@@ -51,7 +51,7 @@ const TaskOrganizer: React.FC = () => {
             mt="3em"
             ml="2em"
             mr={["10vw", "10vw", "15vw", "20vw"]}
-            w={["85vw", "85vw", "35vw", "25em", "30em"]}
+            w={["85vw", "85vw", "85vw", "25em", "30em"]}
         >
             <Text fontSize="1.3em" fontFamily="Anton, sans-serif" color="text.main">
                 Tasks
