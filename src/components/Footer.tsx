@@ -12,7 +12,7 @@ export default function Footer() {
     >
       <Text>
         Created with{" "}
-        <Text fontWeight="bold" display="inline">
+        <Text as="span" fontWeight="bold" display="inline">
           ChakraUI & React
         </Text>{" "}
         by Wesley-M

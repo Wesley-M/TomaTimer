@@ -36,8 +36,11 @@ export type TimeContextType = {
     timer: Timer;
     progress: number;
     timerId: TaskCategory;
-    userStart: () => void;
-    userReset: () => void;
+    start: () => void;
+    reset: () => void;
+    pause: () => void;
+    isPaused: () => boolean;
+    toggle: () => void;
 };
 
 export type ThemeContextType = {

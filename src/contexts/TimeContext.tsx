@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useTimer } from "use-timer";
-import { TimeContextType, Timer, TimerConfig } from "../@types/tasks";
+import { TaskT, TimeContextType, Timer, TimerConfig } from "../@types/tasks";
 import { BREAK, NORMAL } from "../config/config";
 import TasksContext from "./TasksContext";
-import {useThemeContext} from "../themes/ThemeContext";
+import { useThemeContext } from "../themes/ThemeContext";
 
 interface Props {
   children: React.ReactNode;
@@ -26,6 +26,11 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
    * Indicates the current timer being used
    * */
   const [currTimer, setCurrTimer] = useState<"NORMAL" | "BREAK">("NORMAL");
+
+  /**
+   * Indicates the last active task
+   * */
+  const [lastActiveTaskId, setLastActiveTaskId] = useState<number | null>(null);
 
   /**
    * The tasks context
@@ -73,14 +78,14 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
   };
 
   /**
-   * Update the timer based on the current active task
+   * Update the timer typé based on the current active task
    * */
   const updateTimer = () => {
     let activeTaskType = tasksContext?.updateActiveTask()[0]?.type;
     if (["NORMAL", "BREAK"].includes(activeTaskType ?? "")) {
       setCurrTimer(activeTaskType ?? "NORMAL");
     } else {
-      userReset();
+      reset();
     }
   };
 
@@ -97,7 +102,7 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
   /**
    * Start the timer
    * */
-  const userStart = () => {
+  const start = () => {
     getCurrentTimer().start();
     setGlobalStart(true);
   };
@@ -105,9 +110,35 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
   /**
    * Cancel/resets the timer
    * */
-  const userReset = () => {
+  const reset = (stopGlobalStart = true) => {
     getCurrentTimer().reset();
+    if (stopGlobalStart) setGlobalStart(false);
+  };
+
+  /**
+   * Cancel/resets the timer
+   * */
+  const pause = () => {
+    getCurrentTimer().pause();
     setGlobalStart(false);
+  };
+
+  /**
+   * Check if the timer is paused or stopped
+  */
+  const isPaused = () => {
+    return ["PAUSED", "STOPPED"].includes(getCurrentTimer().status);
+  };
+
+  /**
+   * Toggle the timer
+   * */
+  const toggle = () => {
+    if (isPaused()) {
+      start();
+    } else {
+      pause();
+    }
   };
 
   /**
@@ -119,6 +150,28 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
       timer.start();
     }
   };
+
+  /**
+   * Restores the pomodoro timer
+   * */
+  const restorePomodoroTimer = () => {
+    setCurrTimer("NORMAL");
+    pomodoroTimer.reset();
+    theme.changeTheme("NORMAL");
+  }
+
+  /**
+   * Updates the timer and theme given a change in active task
+   * */
+  const updateActiveTask = (activeTask: TaskT) => {
+    setCurrTimer(activeTask.type);
+    setLastActiveTaskId(activeTask.id);
+
+    autoStart(activeTask.type === "NORMAL" ? pomodoroTimer : breakTimer);
+    theme.changeTheme(activeTask.type);
+    
+    reset(false);
+  }
 
   /**
    * If we receive a timeover signal, it means that the timer ran out.
@@ -139,16 +192,14 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
    * */
   useEffect(() => {
     const activeTask = tasksContext?.tasks[0];
-    if (activeTask) {
-      if (["NORMAL", "BREAK"].includes(activeTask.type)) {
-        setCurrTimer(activeTask.type);
-        autoStart(activeTask.type === "NORMAL" ? pomodoroTimer : breakTimer);
-        theme.changeTheme(activeTask.type);
-      }
+    const hasActiveTaskChanged = activeTask && activeTask?.id !== lastActiveTaskId;
+
+    if (hasActiveTaskChanged) {
+      updateActiveTask(activeTask);
     } else {
-      setCurrTimer("NORMAL");
-      pomodoroTimer.reset();
-      theme.changeTheme("NORMAL");
+      if (!activeTask) { 
+        restorePomodoroTimer();
+      }
     }
   }, [tasksContext?.tasks]);
 
@@ -158,8 +209,11 @@ export const TimeProvider: React.FC<Props> = ({ children }) => {
         timer: getCurrentTimer(),
         progress: getTimerProgress(),
         timerId: currTimer,
-        userStart,
-        userReset,
+        start,
+        reset,
+        pause,
+        isPaused,
+        toggle
       }}
     >
       {children}

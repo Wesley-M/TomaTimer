@@ -13,16 +13,6 @@ const PomodoroTimer: React.FC = () => {
         return `${pad(minutes)}:${pad(seconds)}`;
     };
 
-    const toggleTimer = () => {
-        timeContext?.timer.status === "STOPPED"
-            ? timeContext?.userStart()
-            : timeContext?.userReset()
-    }
-
-    const isPaused = () => {
-        return timeContext?.timer.status === "STOPPED";
-    }
-
     return (
         <Box
             mt="3em"
@@ -55,10 +45,10 @@ const PomodoroTimer: React.FC = () => {
                     _hover={{
                         bg: "secondary.main"
                     }}
-                    onClick={toggleTimer}
-                    leftIcon={isPaused() ? <Icon as={MdPlayArrow}/> : <Icon as={MdPause}/>}
+                    onClick={timeContext?.toggle}
+                    leftIcon={timeContext?.isPaused() ? <Icon as={MdPlayArrow}/> : <Icon as={MdPause}/>}
                 >
-                    {isPaused() ? "Start" : "Pause"}
+                    {timeContext?.isPaused() ? "Start" : "Pause"}
                 </Button>
             </VStack>
         </Box>
